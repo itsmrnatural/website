@@ -56,9 +56,14 @@ const Header = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      setScrolled(scrollY > 10);
-      setCollapsed(scrollY > 25);
+      const nextScrolled = scrollY > 10;
+      const nextCollapsed = scrollY > 25;
+
+      setScrolled((current) => (current === nextScrolled ? current : nextScrolled));
+      setCollapsed((current) => (current === nextCollapsed ? current : nextCollapsed));
     };
+
+    handleScroll();
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);

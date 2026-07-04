@@ -1,5 +1,5 @@
 import { useTheme } from "@contexts/ThemeContext";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 /**
@@ -10,6 +10,16 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function ThemeToggle() {
   const { theme, toggleTheme, mounted } = useTheme();
   const [showToast, setShowToast] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const themeSwitchTimerRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (themeSwitchTimerRef.current) {
+        clearTimeout(themeSwitchTimerRef.current);
+      }
+    };
+  }, []);
 
   // Prevent hydration mismatch by not rendering until mounted
   if (!mounted) {
@@ -21,11 +31,24 @@ export default function ThemeToggle() {
   }
 
   const handleToggle = () => {
-    const wasLight = theme === "light";
-    toggleTheme();
+    if (isTransitioning) {
+      return;
+    }
+
+    const wasDark = theme === "dark";
+
+    if (wasDark) {
+      setIsTransitioning(true);
+      themeSwitchTimerRef.current = setTimeout(() => {
+        toggleTheme();
+        setIsTransitioning(false);
+      }, 140);
+    } else {
+      toggleTheme();
+    }
 
     // Show toast when switching to dark mode
-    if (wasLight) {
+    if (!wasDark) {
       setShowToast(true);
       setTimeout(() => setShowToast(false), 2000);
     }
@@ -35,7 +58,8 @@ export default function ThemeToggle() {
     <div className="relative">
       <button
         onClick={handleToggle}
-        className="w-10 h-10 rounded-lg bg-coffee-200 dark:bg-coffee-800 hover:bg-coffee-300 dark:hover:bg-coffee-700 flex items-center justify-center transition-colors duration-200"
+        disabled={isTransitioning}
+        className="w-10 h-10 rounded-lg bg-coffee-200 dark:bg-coffee-800 hover:bg-coffee-300 dark:hover:bg-coffee-700 flex items-center justify-center transition-colors duration-200 disabled:opacity-70 disabled:cursor-wait"
         aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
         title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
       >
@@ -54,9 +78,9 @@ export default function ThemeToggle() {
       <AnimatePresence>
         {showToast && (
           <motion.div
-            initial={{ opacity: 0, x: -20, scale: 0.8 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: -20, scale: 0.8 }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
             transition={{
               type: "spring",
               stiffness: 500,
@@ -71,7 +95,6 @@ export default function ThemeToggle() {
               <motion.span
                 animate={{
                   rotate: [0, -15, 15, -10, 0],
-                  y: [0, -2, 0, -1, 0],
                 }}
                 transition={{ duration: 0.6 }}
                 className="text-xl"

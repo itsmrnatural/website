@@ -119,9 +119,9 @@ export default function LanyardStatus() {
 
       {isOpen && (
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 10 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 10 }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.95 }}
           className="absolute bottom-16 right-0 w-72 bg-white dark:bg-coffee-900 rounded-xl shadow-2xl border border-coffee-200 dark:border-coffee-700 p-4 space-y-3"
         >
           {/* Header with Refresh Button */}
