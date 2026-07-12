@@ -17,4 +17,4 @@ This project is licensed under the [MIT License](/LICENSE.md). Feel free to use,
 
 ## Contact
 
-Feel free to reach out to me at [something.mrnatural@gmail.com](mailto:something.mrnatural@gmail.com).
+Feel free to reach out to me at [itsmrnatural@duck.com](mailto:itsmrnatural@duck.com).
