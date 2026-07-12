@@ -240,53 +240,6 @@ export default function AboutMe() {
             ))}
           </div>
         </motion.section>
-
-        {/* Connect Section at the bottom */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1 }}
-          className="bg-gradient-to-br from-coffee-600 to-coffee-800 dark:from-coffee-800 dark:to-coffee-950 rounded-xl p-8 md:p-12 text-center"
-        >
-          <h2 className="text-3xl font-heading font-bold text-white mb-4">Let's Connect</h2>
-          <p className="text-coffee-100 dark:text-gray-300 mb-8 max-w-2xl mx-auto text-lg">
-            I'm always open to discussing new opportunities, collaborations, or just having a
-            conversation about technology and development.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <motion.a
-              whileHover={{ scale: 1.1, y: -5 }}
-              whileTap={{ scale: 0.95 }}
-              href="mailto:itsmrnatural@duck.com"
-              className="inline-flex items-center gap-2 px-8 py-3 bg-white hover:bg-gray-100 text-coffee-900 rounded-lg font-medium transition-colors"
-            >
-              <i className="fas fa-envelope"></i>
-              Email Me
-            </motion.a>
-            <motion.a
-              whileHover={{ scale: 1.1, y: -5 }}
-              whileTap={{ scale: 0.95 }}
-              href="https://github.com/itsmrnatural"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-8 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/30 rounded-lg font-medium transition-colors"
-            >
-              <i className="fab fa-github"></i>
-              GitHub
-            </motion.a>
-            <motion.a
-              whileHover={{ scale: 1.1, y: -5 }}
-              whileTap={{ scale: 0.95 }}
-              href="https://linkedin.com/in/imdhananjay/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-8 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/30 rounded-lg font-medium transition-colors"
-            >
-              <i className="fab fa-linkedin"></i>
-              Linkedin
-            </motion.a>
-          </div>
-        </motion.section>
       </div>
     </>
   );

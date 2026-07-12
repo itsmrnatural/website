@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import ThemeToggle from "./ThemeToggle";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
@@ -52,21 +52,35 @@ const Header = () => {
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const frameRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const nextScrolled = scrollY > 10;
-      const nextCollapsed = scrollY > 25;
+      if (frameRef.current) {
+        return;
+      }
 
-      setScrolled((current) => (current === nextScrolled ? current : nextScrolled));
-      setCollapsed((current) => (current === nextCollapsed ? current : nextCollapsed));
+      frameRef.current = window.requestAnimationFrame(() => {
+        frameRef.current = null;
+
+        const scrollY = window.scrollY;
+        const nextScrolled = scrollY > 10;
+        const nextCollapsed = scrollY > 25;
+
+        setScrolled((current) => (current === nextScrolled ? current : nextScrolled));
+        setCollapsed((current) => (current === nextCollapsed ? current : nextCollapsed));
+      });
     };
 
     handleScroll();
 
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (frameRef.current) {
+        window.cancelAnimationFrame(frameRef.current);
+      }
+    };
   }, []);
 
   /**

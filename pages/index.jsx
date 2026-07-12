@@ -7,7 +7,6 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import CustomCursor from "@components/CustomCursor";
 import LanyardStatus from "@components/LanyardStatus";
-import { useTheme } from "@contexts/ThemeContext";
 
 /**
  * Home page component displaying personal introduction and information
@@ -16,9 +15,7 @@ import { useTheme } from "@contexts/ThemeContext";
 const Home = () => {
   const [gpgCopied, setGpgCopied] = useState(false);
   const [gpgKey, setGpgKey] = useState("");
-  const { theme, mounted } = useTheme();
 
-  // Fetch GPG key on mount
   useEffect(() => {
     fetch("https://raw.githubusercontent.com/itsmrnatural/itsmrnatural/main/public-key.asc")
       .then((res) => res.text())
@@ -42,8 +39,6 @@ const Home = () => {
     link.click();
     document.body.removeChild(link);
   };
-
-  const heatmapImageClass = mounted && theme === "dark" ? "invert-[0.88] hue-rotate-180 saturate-75 contrast-90" : "";
 
   return (
     <>
@@ -155,7 +150,7 @@ const Home = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8, duration: 0.5 }}
-        className="mt-11 md:mt-14 pb-5 border-b border-coffee-300 dark:border-white/10"
+        className="mt-8 md:mt-10 pb-5 border-b border-coffee-300 dark:border-white/10"
       >
         <h2 className="text-lg font-subheading font-semibold text-coffee-900 dark:text-white mb-4 flex items-center">
           <i className="fas fa-key text-coffee-600 dark:text-coffee-400 mr-2.5 text-sm"></i>
@@ -209,31 +204,8 @@ const Home = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.85, duration: 0.5 }}
-        className="mt-11 md:mt-14 bg-coffee-50 dark:bg-white/[0.02] backdrop-blur-sm rounded-xl p-6 border border-coffee-200 dark:border-white/10"
-      >
-        <h2 className="text-xl font-subheading font-bold text-coffee-900 dark:text-white mb-2 flex items-center gap-2">
-          <i className="fab fa-github text-coffee-600 dark:text-coffee-400"></i>
-          GitHub Contributions
-        </h2>
-        <p className="text-sm text-coffee-600 dark:text-gray-400 mb-6">
-          A quick look at my recent contribution activity
-        </p>
-
-        <div className="overflow-hidden rounded-xl border border-coffee-200 dark:border-white/10 bg-white/60 dark:bg-black/20 p-3 sm:p-4">
-          <img
-            src="https://ghchart.rshah.org/itsmrnatural"
-            alt="GitHub contribution heatmap for itsmrnatural"
-            className={`w-full h-auto ${heatmapImageClass}`}
-          />
-        </div>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1, duration: 0.5 }}
-        className="mt-11 md:mt-14 pb-5 relative"
+         className="mt-8 md:mt-10 relative"
       >
         {/* <h2 className="text-lg font-subheading font-semibold text-coffee-900 dark:text-white mb-5 flex items-center">
           <i className="fas fa-compass text-coffee-600 dark:text-coffee-400 mr-2.5 text-sm"></i>

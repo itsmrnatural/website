@@ -153,13 +153,15 @@ function MyApp({ Component, pageProps }) {
           </div>
         </div>
       </Transition>
-      <Header />
-      <main className="border-b-[7px] border-t-[7px] h-full border-coffee-300 dark:border-neutral-800/50 w-full">
-        <div className="min-h-screen max-w-screen-lg p-5 w-full md:w-10/12 lg:w-8/12 mx-auto transition-all duration-300">
-          <Component {...pageProps} />
-        </div>
-        <Footer />
-      </main>
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="border-b-[7px] border-t-[7px] border-coffee-300 dark:border-neutral-800/50 w-full flex flex-col flex-1 min-h-0">
+          <div className="flex-1 max-w-screen-lg p-5 w-full md:w-10/12 lg:w-8/12 mx-auto transition-all duration-300">
+            <Component {...pageProps} />
+          </div>
+          <Footer />
+        </main>
+      </div>
       <Analytics />
       <SpeedInsights />
     </ThemeProvider>
