@@ -1,6 +1,3 @@
-import Image from "next/image";
-import Tippy from "@tippyjs/react";
-import "tippy.js/dist/tippy.css";
 import { useState, useEffect, useRef, useMemo } from "react";
 
 /**
@@ -191,7 +188,7 @@ const Repositories = ({
         <div className="flex flex-col sm:flex-row items-start sm:items-center mb-3 gap-2">
           {/* Search Input */}
           <div className="flex w-full sm:flex-1" style={{ maxWidth: "32rem" }}>
-            <div className="flex w-full items-center bg-white dark:bg-neutral-800 text-coffee-900 dark:text-white border-2 border-coffee-300 dark:border-neutral-700 rounded-lg px-2.5 py-1.5 transition-all duration-200 focus-within:ring-2 focus-within:ring-coffee-400/60 dark:focus-within:ring-white/40">
+            <div className="flex w-full items-center bg-white dark:bg-neutral-800 text-coffee-900 dark:text-white border-2 border-coffee-300 dark:border-neutral-700 rounded-lg px-2.5 py-1.5 focus-within:ring-2 focus-within:ring-coffee-400/60 dark:focus-within:ring-white/40">
               <i className="fas fa-search mr-2 text-sm text-coffee-700 dark:text-neutral-300" />
               <input
                 ref={searchInputRef}
@@ -201,22 +198,15 @@ const Repositories = ({
                 placeholder="Search repositories..."
                 className="w-full bg-transparent text-xs md:text-sm outline-hidden placeholder:text-coffee-400 dark:placeholder:text-neutral-500"
               />
-              <div className="flex items-center gap-2 ml-2">
-                {searchQuery && (
-                  <button
-                    type="button"
-                    onClick={() => setSearchQuery("")}
-                    className="text-[11px] font-semibold text-coffee-700 dark:text-neutral-300 hover:text-coffee-900 dark:hover:text-white"
-                  >
-                    Clear
-                  </button>
-                )}
-                <kbd className="hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[9px] font-mono font-medium text-coffee-500 dark:text-neutral-500 border border-coffee-300 dark:border-neutral-700 rounded">
-                  <span>Ctrl</span>
-                  <span className="text-coffee-400 dark:text-neutral-600">+</span>
-                  <span>/</span>
-                </kbd>
-              </div>
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="ml-2 text-[11px] font-semibold text-coffee-700 dark:text-neutral-300 hover:text-coffee-900 dark:hover:text-white"
+                >
+                  Clear
+                </button>
+              )}
             </div>
           </div>
 
@@ -224,7 +214,7 @@ const Repositories = ({
           <div className="flex flex-col w-full sm:w-auto relative" ref={filterRef}>
             <button
               onClick={() => setShowLanguageFilter(!showLanguageFilter)}
-              className="flex items-center text-xs md:text-sm bg-coffee-200 dark:bg-neutral-800/30 hover:bg-coffee-300 dark:hover:bg-neutral-800/50 text-coffee-900 dark:text-neutral-300 rounded-lg px-2.5 py-1.5 transition-all duration-200 border border-coffee-300 dark:border-transparent"
+              className="flex items-center text-xs md:text-sm bg-coffee-200 dark:bg-neutral-800/30 hover:bg-coffee-300 dark:hover:bg-neutral-800/50 text-coffee-900 dark:text-neutral-300 rounded-lg px-2.5 py-1.5 border border-coffee-300 dark:border-transparent"
             >
               <i className="fas fa-filter mr-2 text-coffee-700 dark:text-neutral-400 text-xs" />
               {filterLanguage === "all" ? "Filter by Language" : `Language: ${filterLanguage}`}
@@ -236,8 +226,8 @@ const Repositories = ({
             </button>
 
             {/* Expandable Language Filter */}
-            {showLanguageFilter && (
-              <div className="absolute top-full left-0 z-10 mt-2 p-2.5 rounded-lg bg-white dark:bg-neutral-800/90 border border-coffee-300 dark:border-neutral-700/50 w-68 max-h-64 overflow-y-auto backdrop-blur shadow-lg">
+              {showLanguageFilter && (
+              <div className="absolute top-full left-0 z-10 mt-2 p-2.5 rounded-lg bg-white dark:bg-neutral-800 border border-coffee-300 dark:border-neutral-700 w-68 max-h-64 overflow-y-auto">
                 <div className="flex flex-wrap gap-2">
                   {availableLanguages.map((language) => (
                     <button
@@ -273,7 +263,7 @@ const Repositories = ({
           <div className="flex flex-col w-full sm:w-auto relative" ref={sortRef}>
             <button
               onClick={() => setShowSortOptions(!showSortOptions)}
-              className="flex items-center text-xs md:text-sm bg-coffee-200 dark:bg-neutral-800/30 hover:bg-coffee-300 dark:hover:bg-neutral-800/50 text-coffee-900 dark:text-neutral-300 rounded-lg px-2.5 py-1.5 transition-all duration-200 border border-coffee-300 dark:border-transparent"
+              className="flex items-center text-xs md:text-sm bg-coffee-200 dark:bg-neutral-800/30 hover:bg-coffee-300 dark:hover:bg-neutral-800/50 text-coffee-900 dark:text-neutral-300 rounded-lg px-2.5 py-1.5 border border-coffee-300 dark:border-transparent"
             >
               <i className="fas fa-sort mr-2 text-coffee-700 dark:text-neutral-400 text-xs" />
               {`Sort: ${currentSortLabel}`}
@@ -286,7 +276,7 @@ const Repositories = ({
 
             {/* Sort Options Dropdown */}
             {showSortOptions && (
-              <div className="absolute top-full right-0 z-10 mt-2 p-1.5 rounded-lg bg-white dark:bg-neutral-800/90 border border-coffee-300 dark:border-neutral-700/50 w-52 overflow-hidden backdrop-blur shadow-lg">
+              <div className="absolute top-full right-0 z-10 mt-2 p-1.5 rounded-lg bg-white dark:bg-neutral-800 border border-coffee-300 dark:border-neutral-700 w-52 overflow-hidden">
                 {sortOptions.map((option) => (
                   <button
                     key={option.value}
@@ -343,23 +333,8 @@ const Repositories = ({
                   href={`https://github.com/${repo.owner.login}/${repo.name}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`group relative flex flex-col bg-white dark:bg-neutral-900/50 rounded-lg border-2 transition-all duration-300 hover:scale-[1.015] overflow-hidden shadow-lg hover:shadow-2xl ${
-                    isFeatured
-                      ? "border-yellow-400/70 dark:border-yellow-500/50 hover:border-yellow-500 dark:hover:border-yellow-400 hover:shadow-yellow-400/20 dark:hover:shadow-yellow-500/10"
-                      : "border-coffee-300/60 dark:border-neutral-700/60 hover:border-coffee-500 dark:hover:border-neutral-600 hover:shadow-coffee-400/20 dark:hover:shadow-neutral-800/50"
-                  }`}
+                  className="flex flex-col bg-white dark:bg-neutral-900/50 rounded-lg border-2 border-coffee-300/60 dark:border-neutral-700/60 hover:border-coffee-500 dark:hover:border-neutral-600 transition-colors overflow-hidden shadow"
                 >
-                  {/* Static overlay without sliding shimmer */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-
-                  {/* Background gradient overlay */}
-                  <div
-                    className={`absolute inset-0 opacity-30 dark:opacity-20 pointer-events-none ${
-                      isFeatured
-                        ? "bg-gradient-to-br from-yellow-100 via-yellow-50 to-transparent dark:from-yellow-500/10 dark:via-yellow-500/5 dark:to-transparent"
-                        : "bg-gradient-to-br from-coffee-100 via-coffee-50 to-transparent dark:from-neutral-800/30 dark:via-neutral-800/10 dark:to-transparent"
-                    }`}
-                  />
 
                   {/* Card content */}
                   <div className="relative flex flex-col h-full p-3.5">
@@ -368,15 +343,13 @@ const Repositories = ({
                       <div className="flex-1 min-w-0">
                         {/* Repository name */}
                         <div className="flex items-center gap-1.5 mb-1">
-                          <h3 className="text-sm md:text-base font-bold text-coffee-900 dark:text-white group-hover:text-coffee-700 dark:group-hover:text-coffee-300 transition-colors truncate">
+                          <h3 className="text-sm md:text-base font-bold text-coffee-900 dark:text-white truncate">
                             {repo.name}
                           </h3>
                           {repo.isContributor && (
-                            <Tippy content="Contributor">
-                              <span className="flex-shrink-0 text-[9px] px-1.5 py-0.5 bg-blue-100 dark:bg-blue-500/20 text-blue-800 dark:text-blue-300 rounded-full font-bold border border-blue-300 dark:border-blue-500/30">
-                                CONTRIB
-                              </span>
-                            </Tippy>
+                            <span className="flex-shrink-0 text-[9px] px-1.5 py-0.5 bg-blue-100 dark:bg-blue-500/20 text-blue-800 dark:text-blue-300 rounded-full font-bold border border-blue-300 dark:border-blue-500/30">
+                              CONTRIB
+                            </span>
                           )}
                         </div>
                         {/* Owner */}
@@ -387,31 +360,17 @@ const Repositories = ({
 
                       {/* Badges container */}
                       <div className="flex-shrink-0 flex flex-col items-end gap-1">
-                        {/* Featured badge */}
-                        {isFeatured && (
-                          <Tippy content="Featured Project">
-                            <div className="flex items-center gap-1 bg-gradient-to-r from-yellow-400 to-yellow-500 dark:from-yellow-500 dark:to-yellow-600 px-1.5 py-0.5 rounded-full shadow-md">
-                              <i className="fas fa-star text-yellow-900 dark:text-yellow-50 text-[9px]" />
-                              <span className="text-[9px] font-bold text-yellow-900 dark:text-yellow-50 uppercase tracking-wide">
-                                Featured
-                              </span>
-                            </div>
-                          </Tippy>
-                        )}
-
                         {/* Language badge */}
                         {repo.language && (
-                          <Tippy content={`Written in ${repo.language}`}>
-                            <div className="flex items-center gap-1 bg-coffee-200/70 dark:bg-neutral-800/70 px-1.5 py-0.5 rounded-md border border-coffee-300/50 dark:border-neutral-700/50 backdrop-blur-sm">
-                              <span
-                                className="h-1.5 w-1.5 rounded-full ring-1 ring-white/50 dark:ring-black/30"
-                                style={{ backgroundColor: langColor }}
-                              />
-                              <span className="text-[10px] text-coffee-900 dark:text-neutral-200 font-semibold uppercase tracking-wide">
-                                {repo.language}
-                              </span>
-                            </div>
-                          </Tippy>
+                          <div className="flex items-center gap-1 bg-coffee-200/70 dark:bg-neutral-800/70 px-1.5 py-0.5 rounded-md border border-coffee-300/50 dark:border-neutral-700/50">
+                            <span
+                              className="h-1.5 w-1.5 rounded-full"
+                              style={{ backgroundColor: langColor }}
+                            />
+                            <span className="text-[10px] text-coffee-900 dark:text-neutral-200 font-semibold uppercase tracking-wide">
+                              {repo.language}
+                            </span>
+                          </div>
                         )}
                       </div>
                     </div>
@@ -427,59 +386,42 @@ const Repositories = ({
                     <div className="flex items-center justify-between gap-2 pt-2 border-t-2 border-coffee-200/60 dark:border-neutral-800/60">
                       {/* Left side - Stars and Forks */}
                       <div className="flex items-center gap-1.5">
-                        <Tippy content={`${repo.stargazers_count} stars`}>
-                          <div className="flex items-center gap-1 bg-yellow-100/80 dark:bg-yellow-500/15 px-1.5 py-0.5 rounded-md hover:bg-yellow-200/90 dark:hover:bg-yellow-500/25 transition-colors">
-                            <i className="fas fa-star text-yellow-600 dark:text-yellow-400 text-[10px]" />
-                            <span className="text-[11px] font-bold text-coffee-900 dark:text-neutral-200">
-                              {formatNumber(repo.stargazers_count)}
-                            </span>
-                          </div>
-                        </Tippy>
+                        <div className="flex items-center gap-1 bg-yellow-100/80 dark:bg-yellow-500/15 px-1.5 py-0.5 rounded-md">
+                          <i className="fas fa-star text-yellow-600 dark:text-yellow-400 text-[10px]" />
+                          <span className="text-[11px] font-bold text-coffee-900 dark:text-neutral-200">
+                            {formatNumber(repo.stargazers_count)}
+                          </span>
+                        </div>
 
-                        <Tippy content={`${repo.forks} forks`}>
-                          <div className="flex items-center gap-1 bg-coffee-200/80 dark:bg-neutral-800/80 px-1.5 py-0.5 rounded-md hover:bg-coffee-300/90 dark:hover:bg-neutral-700/90 transition-colors">
-                            <i className="fas fa-code-branch text-coffee-800 dark:text-neutral-300 text-[10px]" />
-                            <span className="text-[11px] font-bold text-coffee-900 dark:text-neutral-200">
-                              {formatNumber(repo.forks)}
-                            </span>
-                          </div>
-                        </Tippy>
+                        <div className="flex items-center gap-1 bg-coffee-200/80 dark:bg-neutral-800/80 px-1.5 py-0.5 rounded-md">
+                          <i className="fas fa-code-branch text-coffee-800 dark:text-neutral-300 text-[10px]" />
+                          <span className="text-[11px] font-bold text-coffee-900 dark:text-neutral-200">
+                            {formatNumber(repo.forks)}
+                          </span>
+                        </div>
 
                         {/* License badge (featured only) */}
                         {isFeatured && repo.license && (
-                          <Tippy content={`Licensed under ${repo.license.name}`}>
-                            <div className="flex items-center gap-1 bg-green-100/80 dark:bg-green-500/15 px-1.5 py-0.5 rounded-md hover:bg-green-200/90 dark:hover:bg-green-500/25 transition-colors">
-                              <i className="fas fa-certificate text-green-700 dark:text-green-400 text-[10px]" />
-                              <span className="text-[11px] font-bold text-coffee-900 dark:text-neutral-200">
-                                {repo.license.spdx_id || repo.license.key.toUpperCase()}
-                              </span>
-                            </div>
-                          </Tippy>
+                          <div className="flex items-center gap-1 bg-green-100/80 dark:bg-green-500/15 px-1.5 py-0.5 rounded-md">
+                            <i className="fas fa-certificate text-green-700 dark:text-green-400 text-[10px]" />
+                            <span className="text-[11px] font-bold text-coffee-900 dark:text-neutral-200">
+                              {repo.license.spdx_id || repo.license.key.toUpperCase()}
+                            </span>
+                          </div>
                         )}
                       </div>
 
                       {/* Right side - Updated date */}
-                      <Tippy
-                        content={`Last updated: ${new Date(repo.updated_at).toLocaleDateString(
-                          "en-US",
-                          {
-                            year: "numeric",
-                            month: "long",
+                      <div className="flex items-center gap-1 text-[11px] text-coffee-600 dark:text-neutral-400 font-medium">
+                        <i className="far fa-clock text-[9px]" />
+                        <span className="whitespace-nowrap">
+                          {new Date(repo.updated_at).toLocaleDateString("en-US", {
+                            month: "short",
                             day: "numeric",
-                          }
-                        )}`}
-                      >
-                        <div className="flex items-center gap-1 text-[11px] text-coffee-600 dark:text-neutral-400 font-medium">
-                          <i className="far fa-clock text-[9px]" />
-                          <span className="whitespace-nowrap">
-                            {new Date(repo.updated_at).toLocaleDateString("en-US", {
-                              month: "short",
-                              day: "numeric",
-                              year: "2-digit",
-                            })}
-                          </span>
-                        </div>
-                      </Tippy>
+                            year: "2-digit",
+                          })}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </a>
@@ -487,20 +429,20 @@ const Repositories = ({
             })
           ) : (
             // No repositories match filter
-            <div className="col-span-full flex flex-col items-center justify-center py-10 px-5 bg-coffee-100/40 dark:bg-neutral-800/30 rounded-xl border-2 border-coffee-300/50 dark:border-neutral-700/50">
+            <div className="col-span-full flex flex-col items-center justify-center py-10 px-5 bg-coffee-100/40 dark:bg-neutral-800/30 rounded-lg border border-coffee-300/50 dark:border-neutral-700/50">
               <i className="fas fa-filter text-4xl text-coffee-400 dark:text-neutral-500 mb-3" />
               <h3 className="text-lg font-bold text-coffee-900 dark:text-neutral-200 mb-2">
                 No matching repositories
               </h3>
               <p className="text-xs md:text-sm text-coffee-700 dark:text-neutral-400 text-center mb-4">
-                No repositories found with the language "{filterLanguage}".
+                No repositories found matching your filters.
               </p>
               {(filterLanguage !== "all" || searchQuery) && (
                 <div className="flex flex-wrap justify-center gap-2">
                   {filterLanguage !== "all" && (
                     <button
                       onClick={() => setFilterLanguage("all")}
-                      className="px-3 py-1.5 bg-coffee-500 hover:bg-coffee-600 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-white rounded-lg text-[11px] font-medium transition-colors shadow-md hover:shadow-lg"
+                      className="px-3 py-1.5 bg-coffee-500 hover:bg-coffee-600 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-white rounded-lg text-[11px] font-medium"
                     >
                       Clear Language
                     </button>
@@ -508,7 +450,7 @@ const Repositories = ({
                   {searchQuery && (
                     <button
                       onClick={() => setSearchQuery("")}
-                        className="px-3 py-1.5 bg-coffee-200 hover:bg-coffee-300 dark:bg-neutral-800/70 dark:hover:bg-neutral-700/70 text-coffee-900 dark:text-neutral-200 rounded-lg text-[11px] font-medium transition-colors"
+                        className="px-3 py-1.5 bg-coffee-200 hover:bg-coffee-300 dark:bg-neutral-800/70 dark:hover:bg-neutral-700/70 text-coffee-900 dark:text-neutral-200 rounded-lg text-[11px] font-medium"
                     >
                       Reset Search
                     </button>
@@ -522,7 +464,7 @@ const Repositories = ({
           Array.from({ length: 6 }).map((_, index) => (
             <div
               key={index}
-              className="bg-white dark:bg-neutral-900/50 p-3.5 rounded-lg border-2 border-coffee-300/40 dark:border-neutral-700/40 animate-pulse flex flex-col"
+              className="bg-white dark:bg-neutral-900/50 p-3.5 rounded-lg border-2 border-coffee-300/40 dark:border-neutral-700/40 flex flex-col"
             >
               {/* Header skeleton */}
               <div className="flex items-start justify-between gap-2.5 mb-2">
