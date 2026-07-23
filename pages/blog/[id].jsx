@@ -196,9 +196,9 @@ export default function BlogPost({ post, mdxSource, headings }) {
               </h2>
               <Giscus
                 repo="itsmrnatural/website"
-                repoId="R_kgDOJIewxA"
+                repoId="R_kgDOThnGoA"
                 category="General"
-                categoryId="DIC_kwDOJIewxM4CndAM"
+                categoryId="DIC_kwDOThnGoM4DB02i"
                 mapping="pathname"
                 strict="0"
                 reactionsEnabled="1"
