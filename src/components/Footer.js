@@ -24,7 +24,7 @@ const Footer = () => {
           {/* Right side - Links */}
           <div className="flex items-center gap-3 text-sm font-medium normal-case">
             <a
-              href="https://github.com/itsmrnatural/my-website"
+              href="https://github.com/itsmrnatural/website"
               className="text-coffee-700 dark:text-gray-300 hover:text-coffee-900 dark:hover:text-white underline underline-offset-4 transition-colors"
               target="_blank"
               rel="noopener noreferrer"

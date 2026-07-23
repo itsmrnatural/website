@@ -195,7 +195,7 @@ export default function BlogPost({ post, mdxSource, headings }) {
                 Comments
               </h2>
               <Giscus
-                repo="itsmrnatural/my-website"
+                repo="itsmrnatural/website"
                 repoId="R_kgDOJIewxA"
                 category="General"
                 categoryId="DIC_kwDOJIewxM4CndAM"
