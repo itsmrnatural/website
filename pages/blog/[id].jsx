@@ -302,7 +302,7 @@ function extractHeadings(content) {
   const headings = [];
   let match;
   while ((match = headingRegex.exec(content)) !== null) {
-    const text = match[2].trim().replace(/<[^>]*>/g, "");
+    const text = match[2].trim().replace(/[<>]/g, "");
     const id = text
       .toLowerCase()
       .replace(/[^\w\s-]/g, "")
