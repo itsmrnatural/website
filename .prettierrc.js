@@ -15,9 +15,6 @@ module.exports = {
   arrowParens: "always", // Always include parentheses around arrow function parameters
   trailingComma: "es5", // Add trailing commas where valid in ES5
 
-  // JSX specific
-  jsxBracketSameLine: false, // JSX closing bracket goes on a new line
-
   // Specialized formatting
   proseWrap: "preserve", // Don't wrap markdown text
   htmlWhitespaceSensitivity: "css", // Respect CSS display property
