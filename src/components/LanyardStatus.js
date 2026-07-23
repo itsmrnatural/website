@@ -11,26 +11,35 @@ export default function LanyardStatus() {
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [lastRefresh, setLastRefresh] = useState(null);
-  const [canRefresh, setCanRefresh] = useState(true);
-  const widgetRef = useRef(null);
-
-  // Load last refresh time from localStorage
-  useEffect(() => {
-    const stored = localStorage.getItem("lanyard_last_refresh");
-    if (stored) {
-      const timestamp = parseInt(stored);
-      setLastRefresh(timestamp);
-      const elapsed = Date.now() - timestamp;
-      if (elapsed < 60000) {
-        setCanRefresh(false);
-        setTimeout(() => setCanRefresh(true), 60000 - elapsed);
+  const [lastRefresh, setLastRefresh] = useState(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("lanyard_last_refresh");
+      return stored ? parseInt(stored) : null;
+    }
+    return null;
+  });
+  const [canRefresh, setCanRefresh] = useState(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("lanyard_last_refresh");
+      if (stored) {
+        return Date.now() - parseInt(stored) >= 60000;
       }
     }
-  }, []);
+    return true;
+  });
+  const widgetRef = useRef(null);
 
-  const fetchStatus = () => {
-    setRefreshing(true);
+  useEffect(() => {
+    if (lastRefresh) {
+      const elapsed = Date.now() - lastRefresh;
+      if (elapsed < 60000) {
+        const timer = setTimeout(() => setCanRefresh(true), 60000 - elapsed);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [lastRefresh]);
+
+  useEffect(() => {
     fetch("https://api.lanyard.rest/v1/users/624572769484668938")
       .then((res) => res.json())
       .then((data) => {
@@ -38,30 +47,37 @@ export default function LanyardStatus() {
           setStatus(data.data);
         }
         setLoading(false);
-        setRefreshing(false);
       })
       .catch((err) => {
         console.error("Lanyard error:", err);
         setLoading(false);
-        setRefreshing(false);
       });
-  };
+  }, []);
 
   const handleRefresh = () => {
     if (!canRefresh) return;
 
+    setRefreshing(true);
     const now = Date.now();
     setLastRefresh(now);
     localStorage.setItem("lanyard_last_refresh", now.toString());
     setCanRefresh(false);
-    fetchStatus();
+
+    fetch("https://api.lanyard.rest/v1/users/624572769484668938")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setStatus(data.data);
+        }
+        setRefreshing(false);
+      })
+      .catch((err) => {
+        console.error("Lanyard error:", err);
+        setRefreshing(false);
+      });
 
     setTimeout(() => setCanRefresh(true), 60000);
   };
-
-  useEffect(() => {
-    fetchStatus();
-  }, []);
 
   // Close widget when clicking outside
   useEffect(() => {

@@ -5,51 +5,38 @@ import swr from "@lib/swr";
 import Repositories from "@components/Repositories";
 import Pagination from "@components/Pagination";
 
-/**
- * Projects page component displaying GitHub repositories with pagination
- * @returns {JSX.Element} The Projects page
- */
 export default function Projects() {
   const PAGE_SIZE = 6;
   const [currentPage, setCurrentPage] = useState(1);
-  const [filteredCount, setFilteredCount] = useState(0);
+  const [filteredCount, setFilteredCount] = useState(null);
   const [headerTransform, setHeaderTransform] = useState({ y: 0, opacity: 1 });
   const containerRef = useRef(null);
 
-  // Define featured repository names (customize these to your repos)
   const featuredRepoNames = ["my-website", "c-problems"];
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollPos = window.scrollY;
       const threshold = window.innerHeight * 0.25;
-
       if (scrollPos > threshold) {
-        const translateY = -(scrollPos - threshold) * 0.3;
-        const opacity = Math.max(0.2, 1 - (scrollPos - threshold) / 500);
-        setHeaderTransform({ y: translateY, opacity });
+        setHeaderTransform({
+          y: -(scrollPos - threshold) * 0.3,
+          opacity: Math.max(0.2, 1 - (scrollPos - threshold) / 500),
+        });
       } else {
         setHeaderTransform({ y: 0, opacity: 1 });
       }
     };
-
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Fetch repositories data
   const { data: _repositories, error, isValidating } = swr("/api/repos");
   const repositories = _repositories || [];
-
-  // Separate featured and regular repositories
   const featuredRepos = repositories.filter((repo) => featuredRepoNames.includes(repo.name));
   const regularRepos = repositories.filter((repo) => !featuredRepoNames.includes(repo.name));
   const regularRepoCount = regularRepos.length;
-
-  useEffect(() => {
-    setFilteredCount(regularRepoCount);
-  }, [regularRepoCount]);
 
   const handleRepositoryFiltering = useCallback(({ count, resetPage }) => {
     setFilteredCount(count);
@@ -58,15 +45,11 @@ export default function Projects() {
     }
   }, []);
 
-  const totalPages = Math.max(1, Math.ceil((filteredCount || 0) / PAGE_SIZE));
-  const startIndex = (currentPage - 1) * PAGE_SIZE;
+  const effectiveCount = filteredCount !== null ? filteredCount : regularRepoCount;
+  const totalPages = Math.max(1, Math.ceil(effectiveCount / PAGE_SIZE));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const startIndex = (safeCurrentPage - 1) * PAGE_SIZE;
   const endIndex = startIndex + PAGE_SIZE;
-
-  useEffect(() => {
-    if (currentPage > totalPages) {
-      setCurrentPage(totalPages);
-    }
-  }, [currentPage, totalPages]);
 
   /**
    * Handles navigation to the previous page

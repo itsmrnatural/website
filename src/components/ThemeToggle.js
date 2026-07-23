@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
  * @returns {JSX.Element} Theme toggle button
  */
 export default function ThemeToggle() {
-  const { theme, toggleTheme, mounted } = useTheme();
+  const { theme, toggleTheme } = useTheme();
   const [showToast, setShowToast] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const themeSwitchTimerRef = useRef(null);
@@ -20,15 +20,6 @@ export default function ThemeToggle() {
       }
     };
   }, []);
-
-  // Prevent hydration mismatch by not rendering until mounted
-  if (!mounted) {
-    return (
-      <button className="w-10 h-10 rounded-lg flex items-center justify-center opacity-0">
-        <span className="text-xl">☕</span>
-      </button>
-    );
-  }
 
   const handleToggle = () => {
     if (isTransitioning) {

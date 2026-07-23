@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import hljs from "highlight.js/lib/common";
 
@@ -115,8 +115,6 @@ const languageIcons = {
  */
 export default function CodeBlock({ children, className, ...props }) {
   const [copied, setCopied] = useState(false);
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [lineCount, setLineCount] = useState(0);
   const [hoveredLine, setHoveredLine] = useState(null);
 
   const { codeString, language } = useMemo(() => {
@@ -155,15 +153,8 @@ export default function CodeBlock({ children, className, ...props }) {
     }
   }, [codeString, language]);
 
-  useEffect(() => {
-    const lines = highlightedLines;
-    setLineCount(lines.length);
-    if (lines.length > 15) {
-      setIsCollapsed(true);
-    } else {
-      setIsCollapsed(false);
-    }
-  }, [highlightedLines]);
+  const lineCount = highlightedLines.length;
+  const [isCollapsed, setIsCollapsed] = useState(() => lineCount > 15);
 
   const copyCode = () => {
     if (codeString) {

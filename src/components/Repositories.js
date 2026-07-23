@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 
 /**
  * Formats a number to a human-readable string with K/M suffixes
@@ -87,7 +87,13 @@ const Repositories = ({
   const [searchQuery, setSearchQuery] = useState("");
   const [showLanguageFilter, setShowLanguageFilter] = useState(false);
   const [showSortOptions, setShowSortOptions] = useState(false);
-  const [availableLanguages, setAvailableLanguages] = useState([]);
+  const availableLanguages = useMemo(() => {
+    if (!repositories || repositories.length === 0) return ["all"];
+    const languages = repositories
+      .map((repo) => repo.language)
+      .filter((lang) => lang !== null && lang !== undefined);
+    return ["all", ...new Set(languages)].sort();
+  }, [repositories]);
   const filterRef = useRef(null);
   const sortRef = useRef(null);
   const searchInputRef = useRef(null);
@@ -122,18 +128,6 @@ const Repositories = ({
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
-
-  // Extract available languages from repositories
-  useEffect(() => {
-    if (repositories && repositories.length > 0) {
-      const languages = repositories
-        .map((repo) => repo.language)
-        .filter((lang) => lang !== null && lang !== undefined);
-
-      const uniqueLanguages = ["all", ...new Set(languages)].sort();
-      setAvailableLanguages(uniqueLanguages);
-    }
-  }, [repositories]);
 
   // Filter and sort repositories
   const filteredSortedRepos = repositories
@@ -205,7 +199,7 @@ const Repositories = ({
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
                 placeholder="Search repositories..."
-                className="w-full bg-transparent text-xs md:text-sm outline-none placeholder:text-coffee-400 dark:placeholder:text-neutral-500"
+                className="w-full bg-transparent text-xs md:text-sm outline-hidden placeholder:text-coffee-400 dark:placeholder:text-neutral-500"
               />
               <div className="flex items-center gap-2 ml-2">
                 {searchQuery && (
