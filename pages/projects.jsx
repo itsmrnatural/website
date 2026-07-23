@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import swr from "../public/js/swr";
+import swr from "@lib/swr";
 import Repositories from "@components/Repositories";
 import Pagination from "@components/Pagination";
 
