@@ -23,13 +23,15 @@ const handler = async (req, res) => {
     if (allReposResponse.ok) {
       const allRepos = await allReposResponse.json();
 
-      // Mark repos where user is not the owner as contributor repos
-      const reposWithContributorFlag = allRepos.map((repo) => {
-        if (repo.owner.login.toLowerCase() !== GITHUB_USERNAME.toLowerCase()) {
-          repo.isContributor = true;
-        }
-        return repo;
-      });
+      // Filter out private repos and mark contributor repos
+      const reposWithContributorFlag = allRepos
+        .filter((repo) => !repo.private)
+        .map((repo) => {
+          if (repo.owner.login.toLowerCase() !== GITHUB_USERNAME.toLowerCase()) {
+            repo.isContributor = true;
+          }
+          return repo;
+        });
 
       res.send(reposWithContributorFlag);
       return;
@@ -55,7 +57,7 @@ const handler = async (req, res) => {
     }
 
     const repositories = await publicReposResponse.json();
-    res.send(repositories);
+    res.send(repositories.filter((repo) => !repo.private));
   } catch (error) {
     console.error("Error fetching repositories:", error);
     res.status(500).send("Internal Server Error");
