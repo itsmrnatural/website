@@ -9,7 +9,7 @@ import rehypeHighlight from "rehype-highlight";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import Giscus from "@giscus/react";
-import { useTheme } from "@contexts/ThemeContext";
+import { useTheme } from "@lib/ThemeContext";
 import CodeBlock from "@components/CodeBlock";
 import { useEffect, useState } from "react";
 

@@ -9,7 +9,7 @@ import "tippy.js/animations/shift-toward.css";
 import Router, { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
 import { Transition } from "@headlessui/react";
-import { ThemeProvider } from "../src/contexts/ThemeContext";
+import { ThemeProvider } from "../src/lib/ThemeContext";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 
