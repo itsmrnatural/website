@@ -1,6 +1,5 @@
 import Head from "next/head";
-import { useState, useRef, useEffect, useCallback } from "react";
-import { motion } from "framer-motion";
+import { useState, useCallback } from "react";
 import swr from "@lib/swr";
 import Repositories from "@components/Repositories";
 import Pagination from "@components/Pagination";
@@ -9,28 +8,8 @@ export default function Projects() {
   const PAGE_SIZE = 6;
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredCount, setFilteredCount] = useState(null);
-  const [headerTransform, setHeaderTransform] = useState({ y: 0, opacity: 1 });
-  const containerRef = useRef(null);
 
   const featuredRepoNames = ["my-website", "c-problems"];
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollPos = window.scrollY;
-      const threshold = window.innerHeight * 0.25;
-      if (scrollPos > threshold) {
-        setHeaderTransform({
-          y: -(scrollPos - threshold) * 0.3,
-          opacity: Math.max(0.2, 1 - (scrollPos - threshold) / 500),
-        });
-      } else {
-        setHeaderTransform({ y: 0, opacity: 1 });
-      }
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const { data: _repositories, error, isValidating } = swr("/api/repos");
   const repositories = _repositories || [];
@@ -82,20 +61,15 @@ export default function Projects() {
         <meta property="og:type" content="website" />
       </Head>
 
-      <div ref={containerRef} className="py-6 md:py-8">
-        <motion.div
-          style={{
-            transform: `translateY(${headerTransform.y}px)`,
-            opacity: headerTransform.opacity,
-          }}
-        >
+      <div className="py-6 md:py-8">
+        <div>
           <h1 className="text-3xl md:text-4xl font-heading font-bold text-coffee-900 dark:text-white mb-3">
             My Projects
           </h1>
           <p className="text-sm md:text-base text-coffee-600 dark:text-gray-400 mb-6">
             Explore my open source repositories and personal projects
           </p>
-        </motion.div>
+        </div>
 
         {/* Loading state */}
         {isValidating && repositories.length === 0 && (
@@ -126,20 +100,12 @@ export default function Projects() {
           <>
             {/* Featured Section */}
             {featuredRepos.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="mb-8"
-              >
+              <div className="mb-8">
                 <div className="flex items-center gap-2 mb-4">
-                  <div className="flex items-center gap-2">
-                    <i className="fas fa-star text-yellow-500 dark:text-yellow-400 text-base md:text-lg" />
-                    <h2 className="text-xl md:text-2xl font-heading font-bold text-coffee-900 dark:text-white">
-                      Featured Projects
-                    </h2>
-                  </div>
-                  <div className="flex-1 h-px bg-gradient-to-r from-coffee-300 via-coffee-200 to-transparent dark:from-white/20 dark:via-white/10 dark:to-transparent" />
+                  <h2 className="text-xl md:text-2xl font-heading font-bold text-coffee-900 dark:text-white">
+                    Featured Projects
+                  </h2>
+                  <div className="flex-1 h-px bg-coffee-300/60 dark:bg-white/10" />
                 </div>
                 <Repositories
                   repositories={featuredRepos}
@@ -147,7 +113,7 @@ export default function Projects() {
                   endIndex={featuredRepos.length}
                   isFeatured={true}
                 />
-              </motion.div>
+              </div>
             )}
 
             {/* Regular Repositories Section */}
@@ -158,7 +124,7 @@ export default function Projects() {
                     <h2 className="text-xl md:text-2xl font-heading font-bold text-coffee-900 dark:text-white">
                       All Projects
                     </h2>
-                    <div className="flex-1 h-px bg-gradient-to-r from-coffee-300 via-coffee-200 to-transparent dark:from-white/20 dark:via-white/10 dark:to-transparent" />
+                    <div className="flex-1 h-px bg-coffee-300/60 dark:bg-white/10" />
                   </div>
                 )}
                 <Repositories
