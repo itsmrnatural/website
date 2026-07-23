@@ -352,10 +352,6 @@ const Repositories = ({
                             </span>
                           )}
                         </div>
-                        {/* Owner */}
-                        <p className="text-[11px] text-coffee-600 dark:text-neutral-400 font-medium truncate">
-                          {repo.owner.login}
-                        </p>
                       </div>
 
                       {/* Badges container */}

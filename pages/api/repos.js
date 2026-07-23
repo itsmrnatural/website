@@ -1,5 +1,6 @@
 const GITHUB_API_TOKEN = process.env.GITHUB_API_TOKEN;
 const GITHUB_USERNAME = "itsmrnatural";
+const EXCLUDED_ORGS = ["pypke"];
 
 /**
  * API handler to fetch GitHub repositories including those where user is a contributor
@@ -25,7 +26,7 @@ const handler = async (req, res) => {
 
       // Filter out private repos and mark contributor repos
       const reposWithContributorFlag = allRepos
-        .filter((repo) => !repo.private)
+        .filter((repo) => !repo.private && !EXCLUDED_ORGS.includes(repo.owner.login.toLowerCase()))
         .map((repo) => {
           if (repo.owner.login.toLowerCase() !== GITHUB_USERNAME.toLowerCase()) {
             repo.isContributor = true;
@@ -57,7 +58,7 @@ const handler = async (req, res) => {
     }
 
     const repositories = await publicReposResponse.json();
-    res.send(repositories.filter((repo) => !repo.private));
+    res.send(repositories.filter((repo) => !repo.private && !EXCLUDED_ORGS.includes(repo.owner.login.toLowerCase())));
   } catch (error) {
     console.error("Error fetching repositories:", error);
     res.status(500).send("Internal Server Error");
