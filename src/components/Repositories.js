@@ -358,12 +358,15 @@ const Repositories = ({
                       <div className="flex-shrink-0 flex flex-col items-end gap-1">
                         {/* Language badge */}
                         {repo.language && (
-                          <div className="flex items-center gap-1 bg-coffee-200/70 dark:bg-neutral-800/70 px-1.5 py-0.5 rounded-md border border-coffee-300/50 dark:border-neutral-700/50">
+                          <div
+                            className="flex items-center gap-1 px-1.5 py-0.5 rounded-md"
+                            style={{ backgroundColor: langColor + "30" }}
+                          >
                             <span
                               className="h-1.5 w-1.5 rounded-full"
                               style={{ backgroundColor: langColor }}
                             />
-                            <span className="text-[10px] text-coffee-900 dark:text-neutral-200 font-semibold uppercase tracking-wide">
+                            <span className="text-[10px] text-coffee-900 dark:text-neutral-200 font-semibold">
                               {repo.language}
                             </span>
                           </div>
