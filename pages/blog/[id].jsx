@@ -4,7 +4,6 @@ import { MDXRemote } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 import { getAllPosts, getPostBySlug } from "@lib/mdx";
 import remarkGfm from "remark-gfm";
-import remarkFootnotes from "remark-footnotes";
 import rehypeHighlight from "rehype-highlight";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
@@ -51,49 +50,35 @@ const gradients = [
  * @param {Object} props.mdxSource - Serialized MDX content
  * @returns {JSX.Element} The blog post detail page
  */
-export default function BlogPost({ post, mdxSource }) {
+export default function BlogPost({ post, mdxSource, headings }) {
   const { theme } = useTheme();
-  const [headings, setHeadings] = useState([]);
   const [activeId, setActiveId] = useState("");
 
-  // Extract headings for table of contents
   useEffect(() => {
-    const articleElement = document.querySelector("article");
-    if (articleElement) {
-      const headingElements = articleElement.querySelectorAll("h2, h3, h4, h5");
-      const headingData = Array.from(headingElements).map((heading) => {
-        // Clone the heading to manipulate it
-        const clone = heading.cloneNode(true);
-        // Remove footnote references (sup elements)
-        clone.querySelectorAll("sup").forEach((sup) => sup.remove());
-        return {
-          id: heading.id,
-          text: clone.textContent,
-          level: parseInt(heading.tagName.charAt(1)),
-        };
-      });
-      setHeadings(headingData);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveId(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: "-80px 0px -80% 0px" }
+    );
 
-      // Intersection Observer for active heading
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              setActiveId(entry.target.id);
-            }
-          });
-        },
-        { rootMargin: "-80px 0px -80% 0px" }
-      );
-
+    const timer = setTimeout(() => {
+      const headingElements = document.querySelectorAll("article h2, article h3, article h4, article h5");
       headingElements.forEach((heading) => {
         if (heading.id) {
           observer.observe(heading);
         }
       });
+    }, 0);
 
-      return () => observer.disconnect();
-    }
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
   }, [post]);
 
   if (!post) {
@@ -312,6 +297,23 @@ export async function getStaticPaths() {
  * @param {Object} context - Next.js context
  * @returns {Object} Props containing post data and MDX source
  */
+function extractHeadings(content) {
+  const headingRegex = /^(#{2,5})\s+(.+)$/gm;
+  const headings = [];
+  let match;
+  while ((match = headingRegex.exec(content)) !== null) {
+    const text = match[2].trim().replace(/<[^>]*>/g, "");
+    const id = text
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "");
+    headings.push({ id, text, level: match[1].length });
+  }
+  return headings;
+}
+
 export async function getStaticProps({ params }) {
   const post = getPostBySlug(params.id);
 
@@ -323,7 +325,7 @@ export async function getStaticProps({ params }) {
 
   const mdxSource = await serialize(post.content, {
     mdxOptions: {
-      remarkPlugins: [remarkGfm, [remarkFootnotes, { inlineNotes: true }]],
+      remarkPlugins: [remarkGfm],
       rehypePlugins: [rehypeHighlight, rehypeSlug, rehypeAutolinkHeadings],
     },
     parseFrontmatter: false,
@@ -344,6 +346,7 @@ export async function getStaticProps({ params }) {
         readingTime: post.readingTime,
       },
       mdxSource,
+      headings: extractHeadings(post.content),
     },
   };
 }
